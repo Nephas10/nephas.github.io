@@ -1,107 +1,109 @@
-import React, { useState } from 'react';
-import './Contact.css';
+import React, { useState } from "react";
+import emailjs from "@emailjs/browser";
+import "./Contact.css";
 
-function Contact() {
+export default function Contact() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
+    name: "",
+    email: "",
+    message: "",
   });
-  
-  const [formStatus, setFormStatus] = useState('');
-  
+  const [formStatus, setformStatus] = useState(""); // Declared as setformStatus
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    setFormData({ ...formData, [name]: value });
   };
-  
-  const handleSubmit = (e) => {
+
+  const validateForm = () => {
+    if (!formData.name || !formData.email || !formData.message) {
+      setformStatus("Please fill out all fields."); // Corrected to setformStatus
+      return false;
+    }
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setformStatus("Please provide a valid email address."); // Corrected to setformStatus
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    setFormStatus('success');
-    
-    setTimeout(() => {
-      setFormStatus('');
-      setFormData({ name: '', email: '', message: '' });
-    }, 3000);
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    setformStatus(""); // Corrected to setformStatus
+
+    try {
+      await emailjs.send(
+        "service_95maf8p",
+        "template_3bwmonf",
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+        },
+        "3iFkhX_ebDkvxxvgi"
+      );
+      setformStatus("success"); // Corrected to setformStatus
+      setFormData({ name: "", email: "", message: "" });
+
+      setTimeout(() => setformStatus(""), 5000); // Corrected to setformStatus
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setformStatus("error"); // Corrected to setformStatus
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-  
+
   return (
     <div className="contact-container">
-      <h2>Get In Touch</h2>
-      <p className="contact-intro">Have a question or want to work together? Feel free to reach out!</p>
-      
-      <div className="contact-content">
-        <div className="contact-info">
-          <div className="contact-item">
-            <h3>Email</h3>
-            <p>nephaskango@gmail.com</p>
-          </div>
-          <div className="contact-item">
-            <h3>Location</h3>
-            <p>Lusaka, Zambia</p>
-          </div>
-          <div className="contact-item">
-            <h3>Social</h3>
-            <div className="social-links">
-              <a href="https://github.com/Nephas10" target="_blank" rel="noopener noreferrer">GitHub</a>
-              <a href="https://www.linkedin.com/in/nephas-kango-0676b2216/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-             
-            </div>
-          </div>
-        </div>
-        
-        <div className="contact-form-container">
-          <form className="contact-form" onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="message">Message</label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                rows="5"
-                required
-              ></textarea>
-            </div>
-            
-            <button type="submit" className="submit-btn">Send Message</button>
-            
-            {formStatus === 'success' && (
-              <p className="form-success">Message sent successfully!</p>
-            )}
-          </form>
-        </div>
-      </div>
+      <h2>Contact Me</h2>
+      <p>Feel free to send a message!</p>
+      <form className="contact-form" onSubmit={handleSubmit}>
+        <label>Name</label>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+
+        <label>Email</label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+
+        <label>Message</label>
+        <textarea
+          name="message"
+          value={formData.message}
+          onChange={handleChange}
+          rows="5"
+          required
+        ></textarea>
+
+        <button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Sending..." : "Send Message"}
+        </button>
+
+        {formStatus === "success" && (
+          <p className="form-success">Message sent successfully!</p>
+        )}
+        {formStatus === "error" && (
+          <p className="form-error">Failed to send message. Please try again.</p>
+        )}
+        {formStatus && formStatus !== "success" && formStatus !== "error" && (
+          <p className="form-error">{formStatus}</p>
+        )}
+      </form>
     </div>
   );
 }
-
-export default Contact;

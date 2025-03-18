@@ -40,8 +40,8 @@ export default function Contact() {
         "service_95maf8p",
         "template_3bwmonf",
         {
-          from_name: formData.name,
-          from_email: formData.email,
+          name: formData.name,
+          email: formData.email,
           message: formData.message,
         },
         "3iFkhX_ebDkvxxvgi"

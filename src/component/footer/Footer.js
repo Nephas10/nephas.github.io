@@ -3,7 +3,7 @@ import React from "react";
 function Footer(){
     return(
         <>
-        <p>&copy 2025. Done by Lisarett and Nephas</p>
+        <p>@2025. Done by Lisarett and Nephas</p>
         </>
     )
 }

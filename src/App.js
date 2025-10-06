@@ -4,6 +4,7 @@ import Header from './component/Header/Header';
 import Hero from './component/Hero/Hero';
 import Contact from './component/Contact/Contact';
 import About from './component/About/About';
+import Footer from './component/footer/Footer';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
     <section id="contact">
       <Contact />
     </section>
+    <Footer/>
    </div>
   );
 }

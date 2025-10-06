@@ -16,6 +16,7 @@ export default function Contact() {
     setFormData({ ...formData, [name]: value });
   };
 
+  //validates data entries if they are correct
   const validateForm = () => {
     if (!formData.name || !formData.email || !formData.message) {
       setformStatus("Please fill out all fields."); // Corrected to setformStatus

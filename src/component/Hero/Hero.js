@@ -8,7 +8,7 @@ function Hero(){
             <div className="hero-content">
                 <h1>Hi, I'm <span className="name">Nephas Kango</span></h1>
                 <h2>Software engineer</h2>
-                <p>Build modern applications with software engineering principles i learnt</p>
+                <p>Software Enginnering professional. </p>
                 <div className="hero-buttons">
                     <a href="#contact" className="btn secondary-btn">Contact Me</a>
                 </div>
